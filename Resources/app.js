@@ -1,10 +1,10 @@
 
 (function() {
-    Ti.API.debug("Starting app...");
+    Ti.API.info("Starting app...");
     //Check if TEST_MODE is on.
     var config = require('api/util/config');
     if (config.TEST_MODE === false) {
-        Ti.API.debug("Opening Application Tab Group Controller");
+        Ti.API.info("Opening Application Tab Group Controller");
         Titanium.UI.setBackgroundColor('#000');
         var tabGroup = Titanium.UI.createTabGroup();
         var win1 = Titanium.UI.createWindow({  

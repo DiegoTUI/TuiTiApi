@@ -10,7 +10,7 @@ var config = new function(){
 		version = Ti.Platform.version,
 		height = Ti.Platform.displayCaps.platformHeight,
 		width = Ti.Platform.displayCaps.platformWidth;
-	Ti.API.debug("Platform name: " + Ti.Platform.name + " - width: " + width + " - height: " + height + " - version: " + version);
+	Ti.API.info("Platform name: " + Ti.Platform.name + " - width: " + width + " - height: " + height + " - version: " + version);
 	//Is tablet?
 	self.isTablet = osname === 'ipad' || (osname === 'android' && (width > 899 || height > 899));
 	//Base URL
