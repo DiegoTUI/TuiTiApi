@@ -24,12 +24,13 @@
 		    var arrayIds = [];
 			arrayIds.push(util.randomString(config.TOKEN_LENGTH));
 			expect(arrayIds[0]).toHaveLength(config.TOKEN_LENGTH);
-			for (var i=0; i<10000; i++){
+			for (var i=0; i<1000000; i++){
 				arrayIds.push(util.randomString(config.TOKEN_LENGTH));
 				expect(arrayIds[i+1]).toHaveLength(config.TOKEN_LENGTH);
 			}
 			var reducedArray = util.removeDuplicates(arrayIds);
-			expect(arrayIds.length).toEqual(reducedArray.length);
+			Ti.API.info("arrayIds: " + arrayIds.length + " - reducedArray: " + reducedArray.length);
+			expect(arrayIds.length).toBe(reducedArray.length);
 		});
 	});
 	
