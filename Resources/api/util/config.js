@@ -18,8 +18,6 @@ var config = new function(){
 	//Token and sessionId token lengths
 	self.TOKEN_LENGTH = 8;
 	self.SESSION_ID_LENGTH = 8;
-	//test mode
-	self.TEST_MODE = true;
 	
 	return self;
 };
