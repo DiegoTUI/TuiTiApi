@@ -18,6 +18,8 @@ var config = new function(){
 	//Token and sessionId token lengths
 	self.TOKEN_LENGTH = 12;
 	self.SESSION_ID_LENGTH = 12;
+	//Max number of connection retries
+	self.MAX_CONNECTION_RETRIES = 3;
 	
 	return self;
 };
