@@ -24,16 +24,6 @@ var util = new function (){
             textArray.push(possible.charAt(Math.floor(Math.random() * possible.length)));
     
         return textArray.join('');
-        
-       /*// var random = Math.abs(Math.floor(Math.random() * 0x100000000000));
-       // var result = random.toString(36).slice(-8);
-       var result = seed.toString();
-        while (result.length < 8)
-        {
-            result = '0' + result;
-        }
-        seed++;
-        return result;*/
 	}
 	
 	/**

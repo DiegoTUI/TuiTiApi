@@ -16,8 +16,8 @@ var config = new function(){
 	//Base URL
 	self.BASE_URL = "http://54.246.80.107/api/";
 	//Token and sessionId token lengths
-	self.TOKEN_LENGTH = 12;
-	self.SESSION_ID_LENGTH = 12;
+	self.TOKEN_LENGTH = 8;
+	self.SESSION_ID_LENGTH = 8;
 	//Max number of connection retries
 	self.MAX_CONNECTION_RETRIES = 3;
 	

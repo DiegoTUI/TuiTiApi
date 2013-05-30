@@ -44,7 +44,6 @@
     }
     
     describe('Testing dumb ajax calls', function() {
-        
         it('should call test_get with parameters and receive the result', function() {
             var url = dumbUrl + 'test_get.php?field1=holy&field2=crap';
             responseJson = null;
@@ -59,8 +58,23 @@
                 expect(responseJson).toEqualDictionary(expectedOutput);
             });
         });
-        
-         it('should miserably fail when calling an invalid url', function() {
+        it('should call test_post with parameters and receive the result', function() {
+            var url = dumbUrl + 'test_post.php';
+            var data = {field1: "holy", field2:"crap"};
+            responseJson = null;
+            ajax.send("GET", url, data, ok, nok);
+            waitsFor(function(){ return (responseJson != null);});
+            runs(function(){
+                Ti.API.info("received response in dumb POST call: " + JSON.stringify(responseJson));
+                var expectedOutput = {
+                    rf1:"holy",
+                    rf2:"crap",
+                    rfb:'field2=crap&field1=holy'
+                };
+                expect(responseJson).toEqualDictionary(expectedOutput);
+            });
+        });
+        it('should miserably fail when calling an invalid url', function() {
             var url = dumbUrl + 'test_get?field1=holy&field2=crap';
             responseJson = null;
             ajax.send("GET", url, null, ok, nok);
