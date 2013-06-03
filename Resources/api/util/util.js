@@ -42,7 +42,17 @@ var util = new function (){
         }
         return result;
     }
-	
+    
+    /**
+     * Splits the string using the dot as separator and returns the last element of the split with "List"
+     * added at the end.
+     * @param str: the string to listify
+     * @return the string listified
+     */
+    /*self.listifyString = function (str) {
+        return str.split('.').pop() + "List";
+    };*/
+    
 	return self;
 }
 

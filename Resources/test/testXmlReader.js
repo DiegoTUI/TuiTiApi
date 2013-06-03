@@ -1,0 +1,198 @@
+/**
+ * @author Diego Lafuente
+ */
+
+(function(){
+    
+    Ti.API.info("entered testXmlReader");
+    
+    var XmlReader = require('api/IO/XmlReader');
+    
+    var ticketAvailString = '<TicketAvailRS xsi-schemaLocation="http://www.hotelbeds.com/schemas/2005/06/messages TicketAvailRS.xsd" totalItems="27" echoToken="DummyEchoToken"> \
+        <AuditData> \
+            <ProcessTime>647</ProcessTime> \
+            <Timestamp>2013-05-13 10:49:38.031</Timestamp> \
+            <RequestHost>10.162.29.83</RequestHost> \
+            <ServerName>FORM</ServerName> \
+            <ServerId>FO</ServerId> \
+            <SchemaRelease>2005/06</SchemaRelease>  \
+            <HydraCoreRelease>2.0.201304221213</HydraCoreRelease> \
+            <HydraEnumerationsRelease>1.0.201304221213</HydraEnumerationsRelease> \
+            <MerlinRelease>N/A</MerlinRelease> \
+        </AuditData> \
+        <PaginationData currentPage="1" totalPages="2"/> \
+        <ServiceTicket xsi-type="ServiceTicket" availToken="9ey6mENxtyujqkVKnqvpMA=="> \
+            <DateFrom date="DateFrom1"/> \
+            <DateTo date="DateTo1"/> \
+            <Currency code="EUR1">Euro1</Currency> \
+            <TicketInfo xsi-type="ProductTicket"> \
+                <Code>000200515</Code> \
+                <Name>Ticket1</Name> \
+                <DescriptionList> \
+                    <Description type="generalDescription" languageCode="ENG">Description 11</Description> \
+                    <Description type="generalDescription" languageCode="SPA">Description 12</Description> \
+                </DescriptionList> \
+                <ImageList> \
+                    <Image> \
+                        <Type>S</Type> \
+                        <Order>0</Order> \
+                        <VisualizationOrder>0</VisualizationOrder> \
+                        <Url>Image11</Url> \
+                    </Image> \
+                    <Image> \
+                        <Type>S</Type> \
+                        <Order>0</Order> \
+                        <VisualizationOrder>0</VisualizationOrder> \
+                        <Url>Image12</Url> \
+                    </Image> \
+                    <Image> \
+                        <Type>S</Type> \
+                        <Order>0</Order> \
+                        <VisualizationOrder>0</VisualizationOrder> \
+                        <Url>Image13</Url> \
+                    </Image> \
+                </ImageList> \
+            </TicketInfo> \
+        </ServiceTicket> \
+        <ServiceTicket xsi-type="ServiceTicket" availToken="9ey6mENxtyujqkVKnqvpMA=="> \
+            <DateFrom date="DateFrom2"/> \
+            <DateTo date="DateTo2"/> \
+            <Currency code="EUR2">Euro2</Currency> \
+            <TicketInfo xsi-type="ProductTicket"> \
+                <Code>000200515</Code> \
+                <Name>Ticket2</Name> \
+                <DescriptionList> \
+                    <Description type="generalDescription" languageCode="ENG">Description 21</Description> \
+                    <Description type="generalDescription" languageCode="SPA">Description 22</Description> \
+                </DescriptionList> \
+                <ImageList> \
+                    <Image> \
+                        <Type>S</Type> \
+                        <Order>0</Order> \
+                        <VisualizationOrder>0</VisualizationOrder> \
+                        <Url>Image21</Url> \
+                    </Image> \
+                    <Image> \
+                        <Type>S</Type> \
+                        <Order>0</Order> \
+                        <VisualizationOrder>0</VisualizationOrder> \
+                        <Url>Image22</Url> \
+                    </Image> \
+                    <Image> \
+                        <Type>S</Type> \
+                        <Order>0</Order> \
+                        <VisualizationOrder>0</VisualizationOrder> \
+                        <Url>Image23</Url> \
+                    </Image> \
+                </ImageList> \
+            </TicketInfo> \
+        </ServiceTicket> \
+    </TicketAvailRS>';
+    
+    var ticketAvailMap = [
+    {'DateFrom':'DateFrom.@date'},
+    {'DateTo':'DateTo.@date'},
+    'Currency',
+    {'CurrencyCode': 'Currency.@code'},
+    {'Name': 'TicketInfo.Name'},
+    {'TicketInfo.DescriptionList.Description':[{'Type': '@type',
+                                    'Description': ''}]},
+    {'TicketInfo.ImageList.Image': [{'Type': 'Type',
+                                'Url': 'Url'}]}
+                                ];
+    
+    var ticketClassificationListString = '<TicketClassificationListRS xsi-schemaLocation="http://www.hotelbeds.com/schemas/2005/06/messages TicketClassificationListRS.xsd" totalItems="9" echoToken="DummyEchoToken"> \
+        <AuditData> \
+            <ProcessTime>4</ProcessTime> \
+            <Timestamp>2013-05-15 13:21:03.741</Timestamp> \
+            <RequestHost>10.162.29.83</RequestHost> \
+            <ServerName>FORM</ServerName> \
+            <ServerId>FO</ServerId> \
+            <SchemaRelease>2005/06</SchemaRelease> \
+            <HydraCoreRelease>2.0.201304221213</HydraCoreRelease> \
+            <HydraEnumerationsRelease>1.0.201304221213</HydraEnumerationsRelease> \
+            <MerlinRelease>N/A</MerlinRelease> \
+        </AuditData> \
+        <Classification code="CULTU">Culture Museums</Classification> \
+        <Classification code="FD">Full Day</Classification> \
+        <Classification code="FOOD">Food Nightlife</Classification> \
+        <Classification code="HD">In the morning</Classification> \
+        <Classification code="MD">Multi Day Services</Classification> \
+        <Classification code="OUTAC">Outdoor Adventure</Classification> \
+        <Classification code="PARTE">Theme Aquatic Parks</Classification> \
+        <Classification code="SHOW">Shows and Events</Classification> \
+        <Classification code="SIGHT">Sightseeing Tours</Classification> \
+    </TicketClassificationListRS>';
+    
+    var ticketClassificationListMap = [
+    {'TotalItems':'@totalItems'},
+    {'Classification':[{'Code':'@code',
+                        'Name':''}]}];
+
+    var ticketClassificationListMapAlt = [
+    {'Code':'@code'},
+    {'Name':''}];
+    
+    describe('Xml Reader tests', function() {
+        /*it('should work when presented with a dumb test', function() {
+            var ticketAvailDocument = Ti.XML.parseString(ticketAvailString);
+            var ticketClassificationListDocument = Ti.XML.parseString(ticketClassificationListString);
+            var serviceTickets = ticketAvailDocument.getElementsByTagName("ServiceTicket");
+            var serviceTicketsCurrency = serviceTickets.item(0).getElementsByTagName("Currency");
+            //var serviceTicketsCurrency = ticketAvailDocument.getElementsByTagName("Currency");
+            var serviceTicketsCurrency = ticketAvailDocument.getElementsByTagName("Currency");
+            Ti.API.info("Document length: " + ticketAvailDocument.length);
+            Ti.API.info("TicketAvail nodes("+ ticketAvailDocument.childNodes.length +"): " + listNodes(ticketAvailDocument.childNodes));
+            Ti.API.info("TicketAvail ServiceTicket("+ serviceTickets.length +"): " + listNodes(serviceTickets));
+            Ti.API.info("TicketAvail ServiceTicket-Currency("+ serviceTicketsCurrency.length +"): " + listNodes(serviceTicketsCurrency));
+            Ti.API.info("TicketAvail ServiceTicket-Currency-Value: " + serviceTicketsCurrency.item(0).textContent);
+            Ti.API.info("TicketAvail ServiceTicket-Currency-Code: " + serviceTicketsCurrency.item(0).getAttributes().getNamedItem("code").textContent);
+            Ti.API.info("TicketClassificationList parent node: " + ticketClassificationListDocument.parentNode.nodeName);
+            Ti.API.info("TicketClassificationList clone node: " + ticketClassificationListDocument.cloneNode(true).nodeName);
+            Ti.API.info("TicketClassification nodes("+ ticketClassificationListDocument.childNodes.length + "): " + listNodes(ticketClassificationListDocument.childNodes));
+            Ti.API.info("TicketClassification nodes("+ ticketClassificationListDocument.getElementsByTagName("Classification").length + "): " + listNodes(ticketClassificationListDocument.getElementsByTagName("Classification")));
+        });*/
+        
+        it('should parse ticketAvail Correctly', function() {
+            var xmlReader = new XmlReader (ticketAvailString, ticketAvailMap);
+            var parsedXml = xmlReader.readObjects('ServiceTicket');
+            Ti.API.info("parsedXml: " + JSON.stringify(parsedXml));
+            //Now chek some stuff about the parsed xml
+            expect(parsedXml instanceof Array).toBe(true);
+            expect(parsedXml.length).toBe(2);
+            expect(parsedXml[0].DateFrom).toBe('DateFrom1');
+            expect(parsedXml[0].DateTo).toBe('DateTo1');
+            expect(parsedXml[1].DateFrom).toBe('DateFrom2');
+            expect(parsedXml[1].DateTo).toBe('DateTo2');
+            expect(parsedXml[0].Currency).toBe('Euro1');
+            expect(parsedXml[0].CurrencyCode).toBe('EUR1');
+            expect(parsedXml[1].Currency).toBe('Euro2');
+            expect(parsedXml[1].CurrencyCode).toBe('EUR2');
+            expect(parsedXml[0].Name).toBe('Ticket1');
+            expect(parsedXml[1].Name).toBe('Ticket2');
+            for (var i=0; i<parsedXml.length; i++) {
+                var imageList = parsedXml[i]['TicketInfo.ImageList.Image'.listify()];
+                var descriptionList = parsedXml[i]['TicketInfo.DescriptionList.Description'.listify()];
+                expect(imageList.length).toBe(3);
+                for (var j=0; j<3; j++) {
+                    expect(imageList[j].Type).toBe("S");
+                    expect(imageList[j].Url).toBe("Image"+(i+1)+""+(j+1))
+                }
+                expect(descriptionList.length).toBe(2);
+                for (var j=0; j<2; j++) {
+                    expect(descriptionList[j].Type).toBe("generalDescription");
+                    expect(descriptionList[j].Description).toBe("Description "+(i+1)+""+(j+1))
+                }
+            }
+           
+        });
+    });
+    
+    function listNodes(nodeList) {
+        var result = [];
+        for (var i=0; i< nodeList.length; i++) {
+            result.push(nodeList.item(i).nodeName);
+        }
+        return result.join(",");
+    }
+})();

@@ -4,8 +4,6 @@
 
 /**
  * Ajax class to manage connections.
- * @param baseString: the string with the $keys$ in it
- * @param parameters: a dictionary with keys and values to be replaced in the baseString
  */
 
 var ajax = new function () {
