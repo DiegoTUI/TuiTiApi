@@ -134,26 +134,8 @@
     {'Name':''}];
     
     describe('Xml Reader tests', function() {
-        /*it('should work when presented with a dumb test', function() {
-            var ticketAvailDocument = Ti.XML.parseString(ticketAvailString);
-            var ticketClassificationListDocument = Ti.XML.parseString(ticketClassificationListString);
-            var serviceTickets = ticketAvailDocument.getElementsByTagName("ServiceTicket");
-            var serviceTicketsCurrency = serviceTickets.item(0).getElementsByTagName("Currency");
-            //var serviceTicketsCurrency = ticketAvailDocument.getElementsByTagName("Currency");
-            var serviceTicketsCurrency = ticketAvailDocument.getElementsByTagName("Currency");
-            Ti.API.info("Document length: " + ticketAvailDocument.length);
-            Ti.API.info("TicketAvail nodes("+ ticketAvailDocument.childNodes.length +"): " + listNodes(ticketAvailDocument.childNodes));
-            Ti.API.info("TicketAvail ServiceTicket("+ serviceTickets.length +"): " + listNodes(serviceTickets));
-            Ti.API.info("TicketAvail ServiceTicket-Currency("+ serviceTicketsCurrency.length +"): " + listNodes(serviceTicketsCurrency));
-            Ti.API.info("TicketAvail ServiceTicket-Currency-Value: " + serviceTicketsCurrency.item(0).textContent);
-            Ti.API.info("TicketAvail ServiceTicket-Currency-Code: " + serviceTicketsCurrency.item(0).getAttributes().getNamedItem("code").textContent);
-            Ti.API.info("TicketClassificationList parent node: " + ticketClassificationListDocument.parentNode.nodeName);
-            Ti.API.info("TicketClassificationList clone node: " + ticketClassificationListDocument.cloneNode(true).nodeName);
-            Ti.API.info("TicketClassification nodes("+ ticketClassificationListDocument.childNodes.length + "): " + listNodes(ticketClassificationListDocument.childNodes));
-            Ti.API.info("TicketClassification nodes("+ ticketClassificationListDocument.getElementsByTagName("Classification").length + "): " + listNodes(ticketClassificationListDocument.getElementsByTagName("Classification")));
-        });*/
-        
-        it('should parse ticketAvail Correctly', function() {
+ 
+        it('should parse ticketAvail correctly', function() {
             var xmlReader = new XmlReader (ticketAvailString, ticketAvailMap);
             var parsedXml = xmlReader.readObjects('ServiceTicket');
             Ti.API.info("parsedXml: " + JSON.stringify(parsedXml));
@@ -184,15 +166,63 @@
                     expect(descriptionList[j].Description).toBe("Description "+(i+1)+""+(j+1))
                 }
             }
-           
+        });
+        
+        it('should parse classificationList correctly with no tag', function() {
+            var xmlReader = new XmlReader (ticketClassificationListString, ticketClassificationListMap);
+            var parsedXml = xmlReader.readObjects('');
+            Ti.API.info("parsedXml: " + JSON.stringify(parsedXml));
+            //Now chek some stuff about the parsed xml
+            expect(parsedXml instanceof Array).toBe(true);
+            expect(parsedXml.length).toBe(1);
+            expect(parsedXml[0].TotalItems).toBe('9');
+            expect(parsedXml[0].ClassificationList.length).toBe(9);
+            expect(parsedXml[0].ClassificationList[0].Code).toBe('CULTU');
+            expect(parsedXml[0].ClassificationList[0].Name).toBe('Culture Museums');
+            expect(parsedXml[0].ClassificationList[1].Code).toBe('FD');
+            expect(parsedXml[0].ClassificationList[1].Name).toBe('Full Day');
+            expect(parsedXml[0].ClassificationList[2].Code).toBe('FOOD');
+            expect(parsedXml[0].ClassificationList[2].Name).toBe('Food Nightlife');
+            expect(parsedXml[0].ClassificationList[3].Code).toBe('HD');
+            expect(parsedXml[0].ClassificationList[3].Name).toBe('In the morning');
+            expect(parsedXml[0].ClassificationList[4].Code).toBe('MD'); 
+            expect(parsedXml[0].ClassificationList[4].Name).toBe('Multi Day Services');
+            expect(parsedXml[0].ClassificationList[5].Code).toBe('OUTAC');
+            expect(parsedXml[0].ClassificationList[5].Name).toBe('Outdoor Adventure');
+            expect(parsedXml[0].ClassificationList[6].Code).toBe('PARTE');
+            expect(parsedXml[0].ClassificationList[6].Name).toBe('Theme Aquatic Parks');
+            expect(parsedXml[0].ClassificationList[7].Code).toBe('SHOW');
+            expect(parsedXml[0].ClassificationList[7].Name).toBe('Shows and Events');
+            expect(parsedXml[0].ClassificationList[8].Code).toBe('SIGHT');
+            expect(parsedXml[0].ClassificationList[8].Name).toBe('Sightseeing Tours');
+        });
+        
+        it('should parse classificationList correctly with tag', function() {
+            var xmlReader = new XmlReader (ticketClassificationListString, ticketClassificationListMapAlt);
+            var parsedXml = xmlReader.readObjects('Classification');
+            Ti.API.info("parsedXml: " + JSON.stringify(parsedXml));
+            //Now chek some stuff about the parsed xml
+            expect(parsedXml instanceof Array).toBe(true);
+            expect(parsedXml.length).toBe(9);
+            expect(parsedXml[0].Code).toBe('CULTU');
+            expect(parsedXml[0].Name).toBe('Culture Museums');
+            expect(parsedXml[1].Code).toBe('FD');
+            expect(parsedXml[1].Name).toBe('Full Day');
+            expect(parsedXml[2].Code).toBe('FOOD');
+            expect(parsedXml[2].Name).toBe('Food Nightlife');
+            expect(parsedXml[3].Code).toBe('HD');
+            expect(parsedXml[3].Name).toBe('In the morning');
+            expect(parsedXml[4].Code).toBe('MD'); 
+            expect(parsedXml[4].Name).toBe('Multi Day Services');
+            expect(parsedXml[5].Code).toBe('OUTAC');
+            expect(parsedXml[5].Name).toBe('Outdoor Adventure');
+            expect(parsedXml[6].Code).toBe('PARTE');
+            expect(parsedXml[6].Name).toBe('Theme Aquatic Parks');
+            expect(parsedXml[7].Code).toBe('SHOW');
+            expect(parsedXml[7].Name).toBe('Shows and Events');
+            expect(parsedXml[8].Code).toBe('SIGHT');
+            expect(parsedXml[8].Name).toBe('Sightseeing Tours');
         });
     });
     
-    function listNodes(nodeList) {
-        var result = [];
-        for (var i=0; i< nodeList.length; i++) {
-            result.push(nodeList.item(i).nodeName);
-        }
-        return result.join(",");
-    }
 })();

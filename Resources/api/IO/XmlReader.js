@@ -4,40 +4,6 @@
 
 Ti.include(Titanium.Filesystem.resourcesDirectory + 'api/util/core.js');
 
-/*
-String.prototype.contains = function(str)
-{
-    return this.indexOf(str) != -1;
-}
-
-String.prototype.startsWith = function (str)
-{
-    return this.slice(0, str.length) == str;
-}
-
-String.prototype.substringUpTo = function(str)
-{
-    if (!this.contains(str))
-    {
-        return this;
-    }
-    return this.slice(0, this.indexOf(str));
-}
-
-String.prototype.substringFrom = function(str)
-{
-    if (!this.contains(str))
-    {
-        return '';
-    }
-    return this.slice(this.indexOf(str) + 1);
-}
-
-String.prototype.listify = function ()
-{
-    return this.split('.').pop() + "List";
-}*/
-
 /**
  * The XML Reader string class. Receives an xml string and a description map and returns an array of objects
  * @param xmlString: the xml in string format
@@ -65,11 +31,11 @@ var XmlReader = function(xmlString, descriptionMap)
         if (tag.length > 0) {   //there is a tag to go for
             var nodeList = xmlObject.getElementsByTagName(tag);
             for (var i=0; i<nodeList.length; i++) {
-                Ti.API.info("Processing element... " + i);
+                //Ti.API.info("Processing element... " + i);
                 result.push(processElement(nodeList.item(i)));
             }
         } else {    //No tag, browse the root element
-            result.push(xmlObject);
+            result.push(processElement(xmlObject.cloneNode(true)));
         }
         
         return result;
@@ -84,16 +50,16 @@ var XmlReader = function(xmlString, descriptionMap)
         var result = {};
         //iterate descriptionMap
         for (var i=0; i<descriptionMap.length; i++) {
-            Ti.API.info("Started iteration " + i + "/" + (descriptionMap.length-1));
+            //Ti.API.info("Started iteration " + i + "/" + (descriptionMap.length-1));
             var item = descriptionMap[i];
-            Ti.API.info("Processing item: " + JSON.stringify(item));
+           // Ti.API.info("Processing item: " + JSON.stringify(item));
             if (typeof item === 'string') { //It's a string
                 result[item] = element.getElementsByTagName(item).item(0).textContent;
                 //Ti.API.info("Found string in descriptionMap. Field: " + item +". Value: " + result[item]);
             } 
             else if (typeof item === 'object') {    //It's a dictionary
                 if (Object.keys(item).length !== 1) 
-                    Ti.API.info ("Malformed descriptionMap. More than 1 element in object: " + JSON.stringify(item));
+                    Ti.API.error ("Malformed descriptionMap. More than 1 element in object: " + JSON.stringify(item));
                 //get the first (and only) key of the dictionary
                 for (var key in item) {
                     var value = item[key];
@@ -108,7 +74,7 @@ var XmlReader = function(xmlString, descriptionMap)
                         var listNodeList = nodeListInPath(element, key);
                         //go through it and parse each element
                         for (var j=0; j<listNodeList.length; j++) {
-                            Ti.API.info("Checking for: " + key);
+                            //Ti.API.info("Checking for: " + key);
                             var elementInList = {};
                             for (var innerKey in innerObject) {
                                 //Ti.API.info("Treating innerkey: " + innerKey + " - with value: " + innerObject[innerKey]);
@@ -118,14 +84,15 @@ var XmlReader = function(xmlString, descriptionMap)
                         }
                     }
                     else if (typeof value === 'string') {   //It's a deep value
+                        //Ti.API.info("deep value: " + key + " - " + value);
                         result[key] = valueInXml(element, value);
                     }
                     break; //we only consider the first key
                 }
             }
-            Ti.API.info("Finished iteration " + i + "/" + (descriptionMap.length-1));
+            //Ti.API.info("Finished iteration " + i + "/" + (descriptionMap.length-1));
         }
-        Ti.API.info("result about to be returned: " +JSON.stringify(result));
+        //Ti.API.info("result about to be returned: " +JSON.stringify(result));
         return result;
     }
     
@@ -143,7 +110,7 @@ var XmlReader = function(xmlString, descriptionMap)
         }
         //the last element defines the nodeList
         result = result.getElementsByTagName(pathArray[pathArray.length - 1]);
-        Ti.API.info("Returning NodeList of length " + result.length + " for path " + path);
+        //Ti.API.info("Returning NodeList of length " + result.length + " for path " + path);
         return result;
     }
 
@@ -161,7 +128,10 @@ var XmlReader = function(xmlString, descriptionMap)
             value = tip.textContent;
         }
         else {  //There is an attribute at the end
-            value = tip.getAttributes().getNamedItem(attribute).textContent;
+            var attributes = tip.getAttributes();
+            var namedItem = attributes.getNamedItem(attribute);
+            value = namedItem.textContent;
+            //value = tip.getAttributes().getNamedItem(attribute).textContent;
         }
         //Ti.API.info("Value for path " + path + ": " + value + ". RealPath: " + realPath + " - Attribute: " + attribute + " - Replaced RealPath: " + realPath.replace(/\./g,' '));
         return value;
