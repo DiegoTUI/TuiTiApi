@@ -32,10 +32,10 @@ var XmlReader = function(xmlString, descriptionMap)
             var nodeList = xmlObject.getElementsByTagName(tag);
             for (var i=0; i<nodeList.length; i++) {
                 //Ti.API.info("Processing element... " + i);
-                result.push(processElement(nodeList.item(i)));
+                result.push(processElement(nodeList.item(i), descriptionMap));
             }
         } else {    //No tag, browse the root element
-            result.push(processElement(xmlObject.cloneNode(true)));
+            result.push(processElement(xmlObject.cloneNode(true), descriptionMap));
         }
         
         return result;
@@ -45,7 +45,7 @@ var XmlReader = function(xmlString, descriptionMap)
      * Process an element of the xml according to the description Map and returns an object
      * element: could be a Ti.XML.Node or a Ti.XML.Document
      */
-    function processElement(element) {
+    function processElement(element, descriptionMap) {
         //initialize result
         var result = {};
         //iterate descriptionMap
@@ -66,21 +66,15 @@ var XmlReader = function(xmlString, descriptionMap)
                     if (value instanceof Array) {   //It's a list
                         //Ti.API.info("Key: " + key + " is listified as: " + key.listify());
                         //initialize list
-                        result[key.listify()] = [];
-                        //The array should contain only one element and it should be a dictionary
-                        if (value.length != 1) Ti.API.error ("Malformed descriptionMap. More than 1 element in inner array: " + value);
-                        var innerObject = value[0];
+                        var listifiedKey = key.listify();
+                        result[listifiedKey] = [];
+                        
                         //Get the NodeList that defines the actual list
                         var listNodeList = nodeListInPath(element, key);
                         //go through it and parse each element
                         for (var j=0; j<listNodeList.length; j++) {
                             //Ti.API.info("Checking for: " + key);
-                            var elementInList = {};
-                            for (var innerKey in innerObject) {
-                                //Ti.API.info("Treating innerkey: " + innerKey + " - with value: " + innerObject[innerKey]);
-                                elementInList[innerKey] = valueInXml(listNodeList.item(j), innerObject[innerKey]);
-                            }
-                            result[key.listify()].push(elementInList);
+                            result[listifiedKey].push(processElement(listNodeList.item(j), value));
                         }
                     }
                     else if (typeof value === 'string') {   //It's a deep value
