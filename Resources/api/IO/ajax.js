@@ -76,6 +76,57 @@ var ajax = new function () {
         }
         return true;
     }
+    
+    /**
+     * Process the typical API result for multiple values through a callback or a pipeline.
+     * The typical result has total, results, offset and values; for pagination. Only the values are used here.
+     * For a single callback it is called with the values.
+     * For a pipeline each function is called in order; if it returns a value it replaces the original.
+     * @param callback: either an actual function or a pipeline (an array) of functions
+     * @return a function that, when called, triggers the pipeline/callback
+     */
+    self.processValues = function(callback)
+    {
+        return function(data)
+        {
+            if (typeof callback == 'function')
+            {
+                callback(data.values);
+                return;
+            }
+            self.runPipeline(callback, data.values);
+        };
+    }
+    
+    /**
+     * Run a value through a pipeline of functions.
+     * Each function in the pipeline has its turn to use or modify the data.
+     * If a function returns a value, it substitutes the original data.
+     * @param pipeline: an array of functions
+     * @param data: the data to feed the pipeline with
+     * @returns the data after the pipeline has been run
+     */
+    self.runPipeline = function(pipeline, data)
+    {
+        while (pipeline.length > 0)
+        {
+            var callback = pipeline.shift();
+            if (!callback)
+            {
+                continue;
+            }
+            if (!self.checkCallback(callback, 'Wrong callback in pipeline'))
+            {
+                continue;
+            }
+            var result = callback(data);
+            if (result)
+            {
+                data = result;
+            }
+        }
+        return data;
+    }
 };
 
 var ajaxRequest = function(options) {

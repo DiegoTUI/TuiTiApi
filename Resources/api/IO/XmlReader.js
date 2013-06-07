@@ -8,9 +8,10 @@ Ti.include(Titanium.Filesystem.resourcesDirectory + 'api/util/core.js');
  * The XML Reader string class. Receives an xml string and a description map and returns an array of objects
  * @param xmlString: the xml in string format
  * @param descriptionMap: an array representing the values to be extracted from the xml.
+ * @param tag: the tag representing the objects in the xml to be read. If the tag is null or empty, the map refers to the root element.
  * see testXmlReader to fully understand this class
  */
-var XmlReader = function(xmlString, descriptionMap)
+var XmlReader = function(xmlString, descriptionMap, tag)
 {
     // self-reference
     var self = this;
@@ -20,15 +21,14 @@ var XmlReader = function(xmlString, descriptionMap)
     /**
      * Reads the objects from the xmlString using the descriptionMap
      * Returns an array of JS objects
-     * tag: the tag representing the objects in the xml to be read. If the tag is empty, the map refers to the root element
      */
-    self.readObjects = function(tag) {
+    self.readObjects = function() {
         //initialize result
         var result =[];
         //wrap the string in a jquery object
         var xmlObject = Ti.XML.parseString(xmlString);
         //parse it
-        if (tag.length > 0) {   //there is a tag to go for
+        if (tag && (tag.length > 0)) {   //there is a tag to go for
             var nodeList = xmlObject.getElementsByTagName(tag);
             for (var i=0; i<nodeList.length; i++) {
                 //Ti.API.info("Processing element... " + i);

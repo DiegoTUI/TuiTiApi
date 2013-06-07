@@ -151,7 +151,7 @@
         
         it('should parse ticketAvail correctly with no tag', function() {
             var xmlReader = new XmlReader (ticketAvailString, ticketAvailMapAlt);
-            var parsedXml = xmlReader.readObjects('');
+            var parsedXml = xmlReader.readObjects();
             Ti.API.info("parsedXml: " + JSON.stringify(parsedXml));
             //Now chek some stuff about the parsed xml
             expect(parsedXml instanceof Array).toBe(true);
@@ -185,8 +185,8 @@
         });
  
         it('should parse ticketAvail correctly with tag', function() {
-            var xmlReader = new XmlReader (ticketAvailString, ticketAvailMap);
-            var parsedXml = xmlReader.readObjects('ServiceTicket');
+            var xmlReader = new XmlReader (ticketAvailString, ticketAvailMap, 'ServiceTicket');
+            var parsedXml = xmlReader.readObjects();
             Ti.API.info("parsedXml: " + JSON.stringify(parsedXml));
             //Now chek some stuff about the parsed xml
             expect(parsedXml instanceof Array).toBe(true);
@@ -219,7 +219,7 @@
         
         it('should parse classificationList correctly with no tag', function() {
             var xmlReader = new XmlReader (ticketClassificationListString, ticketClassificationListMapAlt);
-            var parsedXml = xmlReader.readObjects('');
+            var parsedXml = xmlReader.readObjects();
             Ti.API.info("parsedXml: " + JSON.stringify(parsedXml));
             //Now chek some stuff about the parsed xml
             expect(parsedXml instanceof Array).toBe(true);
@@ -247,8 +247,8 @@
         });
         
         it('should parse classificationList correctly with tag', function() {
-            var xmlReader = new XmlReader (ticketClassificationListString, ticketClassificationListMap);
-            var parsedXml = xmlReader.readObjects('Classification');
+            var xmlReader = new XmlReader (ticketClassificationListString, ticketClassificationListMap, 'Classification');
+            var parsedXml = xmlReader.readObjects();
             Ti.API.info("parsedXml: " + JSON.stringify(parsedXml));
             //Now chek some stuff about the parsed xml
             expect(parsedXml instanceof Array).toBe(true);
