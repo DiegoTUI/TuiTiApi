@@ -65,6 +65,7 @@ var ajax = new function () {
      * @return true if the callback is ok, false otherwise
      */
     function checkCallback(callback, message) {
+        //Ti.API.info("checking callback: " + callback.toString());
         if (!callback)
         {
             return true;
@@ -78,23 +79,16 @@ var ajax = new function () {
     }
     
     /**
-     * Process the typical API result for multiple values through a callback or a pipeline.
-     * The typical result has total, results, offset and values; for pagination. Only the values are used here.
-     * For a single callback it is called with the values.
-     * For a pipeline each function is called in order; if it returns a value it replaces the original.
-     * @param callback: either an actual function or a pipeline (an array) of functions
-     * @return a function that, when called, triggers the pipeline/callback
+     * Process one result through a pipeline.
+     * Each function is called in order; if it returns a value it replaces the original.
+     * @param pipeline: a pipeline of functions
+     * @return a function that, when called, triggers the pipeline
      */
-    self.processValues = function(callback)
+    self.process = function(pipeline)
     {
         return function(data)
         {
-            if (typeof callback == 'function')
-            {
-                callback(data.values);
-                return;
-            }
-            self.runPipeline(callback, data.values);
+            self.runPipeline(pipeline, data);
         };
     }
     
@@ -115,7 +109,7 @@ var ajax = new function () {
             {
                 continue;
             }
-            if (!self.checkCallback(callback, 'Wrong callback in pipeline'))
+            if (!checkCallback(callback, 'Wrong callback in pipeline'))
             {
                 continue;
             }
@@ -143,11 +137,11 @@ var ajaxRequest = function(options) {
     self.send = function() {
         var request = Titanium.Network.createHTTPClient(options.create);
         request.onload = function() {
-            Ti.API.info("Successful response for url " + options.url + ": " + request.responseText + " - " + JSON.stringify(arguments));
+            //Ti.API.info("Successful response for url " + options.url + ": " + request.responseText + " - " + JSON.stringify(arguments));
             options.ok(request.responseText);
         };
         request.onerror = function() {
-            Ti.API.info("Error response for url " + options.url + ": " + JSON.stringify(arguments) + " - " + JSON.stringify(this));
+            //Ti.API.info("Error response for url " + options.url + ": " + JSON.stringify(arguments) + " - " + JSON.stringify(this));
             retries++;
             if (retries < config.MAX_CONNECTION_RETRIES) {
                 Ti.API.info("retrying connection...");

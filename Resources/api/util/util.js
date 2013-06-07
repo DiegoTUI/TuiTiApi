@@ -44,14 +44,14 @@ var util = new function (){
     }
     
     /**
-     * Splits the string using the dot as separator and returns the last element of the split with "List"
-     * added at the end.
-     * @param str: the string to listify
-     * @return the string listified
+     * Return the date object in ATLAS format: yyyymmdd.
+     * @param date: a date object
+     * @return a string with the atlas date
      */
-    /*self.listifyString = function (str) {
-        return str.split('.').pop() + "List";
-    };*/
+    self.atlasDate = function(date)
+    {
+         return (date.getFullYear()*10000 + (date.getMonth()+1)*100 + date.getDate()).toString();
+    }
     
 	return self;
 }
