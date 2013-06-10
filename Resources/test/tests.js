@@ -6,10 +6,10 @@
 	
 	// Include all the test files
 	Ti.include(Titanium.Filesystem.resourcesDirectory + 'test/testUtil.js');
-	Ti.include(Titanium.Filesystem.resourcesDirectory + 'test/testParametrizedString.js');
-	Ti.include(Titanium.Filesystem.resourcesDirectory + 'test/testXmlReader.js');
-	Ti.include(Titanium.Filesystem.resourcesDirectory + 'test/testAjax.js');
-	Ti.include(Titanium.Filesystem.resourcesDirectory + 'test/testTicketAvail.js');
+	//Ti.include(Titanium.Filesystem.resourcesDirectory + 'test/testParametrizedString.js');
+	//Ti.include(Titanium.Filesystem.resourcesDirectory + 'test/testXmlReader.js');
+	//Ti.include(Titanium.Filesystem.resourcesDirectory + 'test/testAjax.js');
+	//Ti.include(Titanium.Filesystem.resourcesDirectory + 'test/testTicketAvail.js');
 	
 	jasmine.getEnv().addReporter(new jasmine.TitaniumReporter());
 	jasmine.getEnv().execute();

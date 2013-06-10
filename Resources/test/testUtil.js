@@ -32,4 +32,43 @@
 		});
 	});
 	
+	describe('jsonToXml', function() {
+        Ti.API.info("entered jsonToXml");
+
+        var jsonObject = {
+            HotelListRQ: {
+                "@echoToken": "DummyEchoToken",
+                "@xmlns": "http://www.hotelbeds.com/schemas/2005/06/messages",
+                "@xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+                "@xsi:schemaLocation": "http://www.hotelbeds.com/schemas/2005/06/messages HotelListRQ.xsd",
+                Language: "ENG",
+                Credentials:{
+                    User: "ISLAS",
+                    "Password": "ISLAS"
+                },
+                Destination:{
+                    "@code": "PMI",
+                    "@type": "SIMPLE",
+                    "#value": "Palma"
+                },
+                ZoneList:[{zone:{"@code":"01",
+                                 "name":"Alcudia"}},
+                          {zone:{"@code":"02",
+                                 "name":"Andratx"}},
+                          {zone:{"@code":"03",
+                                 "name":"Portals"}}
+                ],
+                "#list":[{classification:{"@code":"01",
+                                          "#value":"class1"}},
+                         {classification:{"@code":"02",
+                                          "#value":"class2"}}
+                ]
+            }
+        }
+        it('should convert JSON into XML correctly', function() {
+            var xmlString = util.jsonToXml(jsonObject);
+            Ti.API.info("xmlString: " + xmlString);
+        });
+    });
+	
 })();
