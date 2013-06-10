@@ -6,6 +6,8 @@
 	
 	Ti.API.info("entered testUtil");
 	
+	Ti.include(Titanium.Filesystem.resourcesDirectory + 'api/util/core.js');
+	
 	var util = require('api/util/util');
 	var config = require('api/util/config');
 	
@@ -67,8 +69,40 @@
         }
         it('should convert JSON into XML correctly', function() {
             var xmlString = util.jsonToXml(jsonObject);
-            Ti.API.info("xmlString: " + xmlString);
+            for (var key in jsonObject) {
+                checkNode(key, jsonObject[key], xmlString);
+            }
         });
+        
+        function checkNode(key, value, xmlString) {
+            if (key.startsWith('@')) {
+                expect(xmlString.contains(key.substringFrom('@'))).toBe(true);
+            } else if (key === '#value') {
+                expect(xmlString.contains(value)).toBe(true);
+            } else if (key === '#list') {
+                for (var i=0; i<value.length; i++) {
+                    for (var innerKey in value[i]) {
+                        checkNode(innerKey, value[i][innerKey], xmlString);
+                    }
+                }
+            } else {
+                expect(xmlString.contains('<'+key)).toBe(true);
+                expect(xmlString.contains('</'+key+'>')).toBe(true);
+                if (typeof value === "string") {
+                    expect(xmlString.contains(value)).toBe(true);
+                } else if (value instanceof Array) {
+                    for (var i=0; i<value.length; i++) {
+                        for (var innerKey in value[i]) {
+                            checkNode(innerKey, value[i][innerKey], xmlString);
+                        }
+                    }
+                } else if (value instanceof Object) {
+                    for (var innerKey in value) {
+                        checkNode(innerKey, value[innerKey], xmlString);
+                    }
+                }
+            }
+        }
     });
 	
 })();

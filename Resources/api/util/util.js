@@ -89,7 +89,6 @@ var util = new function (){
         } else {    //It's a "regular" node
             result += '<' + key;
             if (typeof value === "string") {  //"regular" value
-                Ti.API.info("instance of string: " + key + " - " + value);
                 result += '>' + value;
             } else if (value instanceof Array) { //it's a "key" list
                 result += '>\n';
