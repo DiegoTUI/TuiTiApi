@@ -57,8 +57,7 @@
             waitsFor(function(){ return (responseJson != null);});
             runs(function(){
                 expect("error" in responseJson).toBe(false);
-                expect(responseJson.length).toEqual(1);
-                expect(responseJson[0].ServiceTicketList.length).toEqual(parseInt(responseJson[0].TotalItems));
+                expect(responseJson.ServiceTicketList.length).toEqual(parseInt(responseJson.TotalItems));
             });
         });
     });

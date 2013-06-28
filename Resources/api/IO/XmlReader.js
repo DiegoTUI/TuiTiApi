@@ -35,7 +35,7 @@ var XmlReader = function(xmlString, descriptionMap, tag)
                 result.push(processElement(nodeList.item(i), descriptionMap));
             }
         } else {    //No tag, browse the root element
-            result.push(processElement(xmlObject.cloneNode(true), descriptionMap));
+            result = processElement(xmlObject.cloneNode(true), descriptionMap);
         }
         
         return result;

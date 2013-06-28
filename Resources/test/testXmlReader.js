@@ -148,29 +148,28 @@
                         {'Name':''}]}];
     
     describe('Xml Reader tests', function() {
-        
-        it('should parse ticketAvail correctly with no tag', function() {
+       
+       it('should parse ticketAvail correctly with no tag', function() {
             var xmlReader = new XmlReader (ticketAvailString, ticketAvailMapAlt);
             var parsedXml = xmlReader.readObjects();
             Ti.API.info("parsedXml: " + JSON.stringify(parsedXml));
             //Now chek some stuff about the parsed xml
-            expect(parsedXml instanceof Array).toBe(true);
-            expect(parsedXml.length).toBe(1);
-            expect(parsedXml[0].TotalItems).toBe('27');
-            expect(parsedXml[0].ServiceTicketList.length).toBe(2);
-            expect(parsedXml[0].ServiceTicketList[0].DateFrom).toBe('DateFrom1');
-            expect(parsedXml[0].ServiceTicketList[0].DateTo).toBe('DateTo1');
-            expect(parsedXml[0].ServiceTicketList[1].DateFrom).toBe('DateFrom2');
-            expect(parsedXml[0].ServiceTicketList[1].DateTo).toBe('DateTo2');
-            expect(parsedXml[0].ServiceTicketList[0].Currency).toBe('Euro1');
-            expect(parsedXml[0].ServiceTicketList[0].CurrencyCode).toBe('EUR1');
-            expect(parsedXml[0].ServiceTicketList[1].Currency).toBe('Euro2');
-            expect(parsedXml[0].ServiceTicketList[1].CurrencyCode).toBe('EUR2');
-            expect(parsedXml[0].ServiceTicketList[0].Name).toBe('Ticket1');
-            expect(parsedXml[0].ServiceTicketList[1].Name).toBe('Ticket2');
-            for (var i=0; i<parsedXml[0].ServiceTicketList.length; i++) {
-                var imageList = parsedXml[0].ServiceTicketList[i]['TicketInfo.ImageList.Image'.listify()];
-                var descriptionList = parsedXml[0].ServiceTicketList[i]['TicketInfo.DescriptionList.Description'.listify()];
+            expect(parsedXml instanceof Object).toBe(true);
+            expect(parsedXml.TotalItems).toBe('27');
+            expect(parsedXml.ServiceTicketList.length).toBe(2);
+            expect(parsedXml.ServiceTicketList[0].DateFrom).toBe('DateFrom1');
+            expect(parsedXml.ServiceTicketList[0].DateTo).toBe('DateTo1');
+            expect(parsedXml.ServiceTicketList[1].DateFrom).toBe('DateFrom2');
+            expect(parsedXml.ServiceTicketList[1].DateTo).toBe('DateTo2');
+            expect(parsedXml.ServiceTicketList[0].Currency).toBe('Euro1');
+            expect(parsedXml.ServiceTicketList[0].CurrencyCode).toBe('EUR1');
+            expect(parsedXml.ServiceTicketList[1].Currency).toBe('Euro2');
+            expect(parsedXml.ServiceTicketList[1].CurrencyCode).toBe('EUR2');
+            expect(parsedXml.ServiceTicketList[0].Name).toBe('Ticket1');
+            expect(parsedXml.ServiceTicketList[1].Name).toBe('Ticket2');
+            for (var i=0; i<parsedXml.ServiceTicketList.length; i++) {
+                var imageList = parsedXml.ServiceTicketList[i]['TicketInfo.ImageList.Image'.listify()];
+                var descriptionList = parsedXml.ServiceTicketList[i]['TicketInfo.DescriptionList.Description'.listify()];
                 expect(imageList.length).toBe(3);
                 for (var j=0; j<3; j++) {
                     expect(imageList[j].Type).toBe("S");
@@ -216,34 +215,33 @@
                 }
             }
         });
-        
-        it('should parse classificationList correctly with no tag', function() {
+       
+       it('should parse classificationList correctly with no tag', function() {
             var xmlReader = new XmlReader (ticketClassificationListString, ticketClassificationListMapAlt);
             var parsedXml = xmlReader.readObjects();
             Ti.API.info("parsedXml: " + JSON.stringify(parsedXml));
             //Now chek some stuff about the parsed xml
-            expect(parsedXml instanceof Array).toBe(true);
-            expect(parsedXml.length).toBe(1);
-            expect(parsedXml[0].TotalItems).toBe('9');
-            expect(parsedXml[0].ClassificationList.length).toBe(9);
-            expect(parsedXml[0].ClassificationList[0].Code).toBe('CULTU');
-            expect(parsedXml[0].ClassificationList[0].Name).toBe('Culture Museums');
-            expect(parsedXml[0].ClassificationList[1].Code).toBe('FD');
-            expect(parsedXml[0].ClassificationList[1].Name).toBe('Full Day');
-            expect(parsedXml[0].ClassificationList[2].Code).toBe('FOOD');
-            expect(parsedXml[0].ClassificationList[2].Name).toBe('Food Nightlife');
-            expect(parsedXml[0].ClassificationList[3].Code).toBe('HD');
-            expect(parsedXml[0].ClassificationList[3].Name).toBe('In the morning');
-            expect(parsedXml[0].ClassificationList[4].Code).toBe('MD'); 
-            expect(parsedXml[0].ClassificationList[4].Name).toBe('Multi Day Services');
-            expect(parsedXml[0].ClassificationList[5].Code).toBe('OUTAC');
-            expect(parsedXml[0].ClassificationList[5].Name).toBe('Outdoor Adventure');
-            expect(parsedXml[0].ClassificationList[6].Code).toBe('PARTE');
-            expect(parsedXml[0].ClassificationList[6].Name).toBe('Theme Aquatic Parks');
-            expect(parsedXml[0].ClassificationList[7].Code).toBe('SHOW');
-            expect(parsedXml[0].ClassificationList[7].Name).toBe('Shows and Events');
-            expect(parsedXml[0].ClassificationList[8].Code).toBe('SIGHT');
-            expect(parsedXml[0].ClassificationList[8].Name).toBe('Sightseeing Tours');
+            expect(parsedXml instanceof Object).toBe(true);
+            expect(parsedXml.TotalItems).toBe('9');
+            expect(parsedXml.ClassificationList.length).toBe(9);
+            expect(parsedXml.ClassificationList[0].Code).toBe('CULTU');
+            expect(parsedXml.ClassificationList[0].Name).toBe('Culture Museums');
+            expect(parsedXml.ClassificationList[1].Code).toBe('FD');
+            expect(parsedXml.ClassificationList[1].Name).toBe('Full Day');
+            expect(parsedXml.ClassificationList[2].Code).toBe('FOOD');
+            expect(parsedXml.ClassificationList[2].Name).toBe('Food Nightlife');
+            expect(parsedXml.ClassificationList[3].Code).toBe('HD');
+            expect(parsedXml.ClassificationList[3].Name).toBe('In the morning');
+            expect(parsedXml.ClassificationList[4].Code).toBe('MD'); 
+            expect(parsedXml.ClassificationList[4].Name).toBe('Multi Day Services');
+            expect(parsedXml.ClassificationList[5].Code).toBe('OUTAC');
+            expect(parsedXml.ClassificationList[5].Name).toBe('Outdoor Adventure');
+            expect(parsedXml.ClassificationList[6].Code).toBe('PARTE');
+            expect(parsedXml.ClassificationList[6].Name).toBe('Theme Aquatic Parks');
+            expect(parsedXml.ClassificationList[7].Code).toBe('SHOW');
+            expect(parsedXml.ClassificationList[7].Name).toBe('Shows and Events');
+            expect(parsedXml.ClassificationList[8].Code).toBe('SIGHT');
+            expect(parsedXml.ClassificationList[8].Name).toBe('Sightseeing Tours');
         });
         
         it('should parse classificationList correctly with tag', function() {
